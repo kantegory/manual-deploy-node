@@ -1,0 +1,14 @@
+stages:
+  - build
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - rsync -av --progress ./ /var/www/apps/manual-node-deploy/
+    - docker compose -f /var/www/apps/manual-deploy-deploy/docker-compose.yml build
+
+deploy-job:
+  stage: deploy
+  script:
+    - docker compose -f /var/www/apps/manual-deploy-deploy/docker-compose.yml up -d --force-recreate
